@@ -10,27 +10,42 @@ configure do
 end
 
 get '/' do
-  #Add code here
+  erb :search_form
 end
 
-
-#Add code here
-
-
-get '/movies/new' do
-  erb :new_movie
+get '/movies' do
+  # /movies comes from the form action
+  c = PGconn.new(:host => "localhost", :dbname => 'moviesdb')
+  # host maps to a string so it needs to be in quotes
+  @movies = c.exec_params("select * from search where name=$1;",[params["title"]])
+  
+  # title comes from the html form
+  erb :display_search
+ end
+  
+get '/movie/:id' do
+  # view for details of one movie
+  # does extra search for the imdb movies_info
+  movies_info[title]
+  # $1 allows us to use this as a placeholder to pass something into the sql
+  c.close
+  erb :index
 end
 
-post '/movies' do
+post '/movies/new' do
   c = PGconn.new(:host => "localhost", :dbname => dbname)
   c.exec_params("INSERT INTO movies (title, year) VALUES ($1, $2)",
                   [params["title"], params["year"]])
+
+  # for ruby variables we use the $ placeholder insert into an array
   c.close
   redirect '/'
 end
 
 def dbname
-  "test.db"
+  "moviesdb" 
+  # table name search 
+  # change this to your db
 end
 
 def create_movies_table

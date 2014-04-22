@@ -1,0 +1,17 @@
+
+<% @movies.each do |movies_info| %>
+
+ <a href="/movies/<%movie['id']%>"> <%= movies_info["name"] %></a>
+ <%= movies_info["year"] %>
+
+<% end %>
+
+
+<!-- 
+<%@movies.each do |movies_info|%>
+
+<%=movies_info["name"]%> 
+
+<%end%>
+ -->
+
